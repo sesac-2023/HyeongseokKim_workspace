@@ -215,3 +215,150 @@ FROM(
 ORDER BY Percentile ASC;
 #고객(Customers)의 국가(Country)별 고객수와 백분위 (국가별고객수 / 전체고객수 * 100)을 구하세요.(백분위로 오름차순 정렬까지)
 
+--데이터 조인
+#Students, Grades 조인하기
+SELECT *
+FROM Students
+    INNER JOIN Grades
+    ON Students.StudentID = Grades.StudentID;
+
+#Students에 성적없는 학생정보만 삽입
+INSERT INTO Students(Name, Age, Address) VALUES ("JASON", 36, "서울");
+
+SELECT *
+FROM Students
+    LEFT JOIN Grades
+    ON Students.StudentID = Grades.StudentID;
+
+SELECT *
+FROM Students
+    RIGHT JOIN Grades
+    ON Students.StudentID = Grades.StudentID;
+
+SELECT *
+FROM Students
+    LEFT JOIN Grades
+    ON Students.StudentID = Grades.StudentID
+UNION
+SELECT *
+FROM Students
+    RIGHT JOIN Grades
+    ON Students.StudentID = Grades.StudentID;
+
+INSERT INTO Grades(StudentID) VALUES (6);
+
+SELECT *
+FROM Students
+    INNER JOIN Grades
+    ON Students.StudentID = Grades.StudentID
+GROUP BY Grades.StudentID;
+
+--실습 
+SELECT Products.*, Suppliers.SupplierName
+FROM Products
+    LEFT JOIN Suppliers
+    ON Products.SupplierID = Suppliers.SupplierID
+WHERE Suppliers.City="Tokyo";
+#Tokyo에 위치한 공급자(Supplier)가 생산한 상품(Products) 목록 조회
+
+SELECT ProductName, CategoryName
+FROM Products
+    LEFT JOIN Categories
+    ON Products.CategoryID = Categories.CategoryID
+WHERE Categories.CategoryName="Seafood";
+# 분류(CategoryName)가 Seafood인 상품명(ProductName) 조회
+
+#방법1
+SELECT S.country, C.CategoryName, COUNT(*) AS ProductNum, AVG(Price) MeanPrice
+FROM Products AS P
+    INNER JOIN Suppliers AS S
+    ON P.SupplierID = S.SupplierID
+    INNER JOIN Categories AS C
+    ON P.CategoryID = C.CategoryID
+GROUP BY S.country, C.CategoryName;
+#방법2
+SELECT S.country, C.CategoryName, COUNT(*) AS ProductNum, AVG(Price) MeanPrice
+FROM Products AS P, Suppliers AS S, Categories AS C
+WHERE P.SupplierID=S.SupplierID AND P.CategoryID=C.CategoryID
+GROUP BY S.country, C.CategoryName;
+#공급자(Supplier)가 공급한 상품의 공급자 국가(Country), 
+카테고리별로 상품건수와 평균가격 조회
+
+#방법1
+SELECT OD.OrderID, CustomerName, LastName AS EmployeeName, ShipperName, COUNT(OrderDetailID)
+FROM OrderDetails AS OD
+    INNER JOIN Orders AS O
+    ON OD.OrderID=O.OrderID
+    INNER JOIN Customers AS C
+    ON O.CustomerID=C.CustomerID
+    INNER JOIN Employees AS E
+    ON O.EmployeeID=E.EmployeeID
+    INNER JOIN Shippers AS SH
+    ON O.ShipperID=SH.ShipperID
+GROUP BY OD.OrderID;
+#방법2
+SELECT OD.OrderID, CustomerName, LastName AS EmployeeName, ShipperName, COUNT(OrderDetailID)
+FROM OrderDetails AS OD, Orders AS O, Customers AS C, Employees AS E, Shippers AS SH
+WHERE OD.OrderID=O.OrderID AND O.CustomerID=C.CustomerID AND O.EmployeeID=E.EmployeeID AND O.ShipperID=SH.ShipperID
+GROUP BY OD.OrderID;
+#주문별 주문자명(CustomerName), 직원명(LastName), 배송자명(ShipperName), 주문상세갯수
+
+#방법1
+SELECT P.SupplierID, S.SupplierName, SUM(OD.Quantity) AS Sum
+FROM Products AS P
+    INNER JOIN OrderDetails AS OD
+    ON OD.ProductID=P.ProductID
+    INNER JOIN Suppliers AS S
+    ON P.SupplierID=S.SupplierID
+GROUP BY S.SupplierName
+ORDER BY Sum DESC
+LIMIT 3;
+#방법2
+SELECT P.SupplierID, S.SupplierName, SUM(OD.Quantity) AS Sum
+FROM Products AS P, OrderDetails AS OD, Suppliers AS S
+WHERE OD.ProductID=P.ProductID AND P.SupplierID=S.SupplierID
+GROUP BY S.SupplierName
+ORDER BY Sum DESC
+LIMIT 3;
+#판매량(Quantity) 상위 TOP 3 공급자(supplier) 목록 조회
+
+#방법1
+SELECT P.ProductID, P.ProductName, SUM(OD.Quantity) AS SumQuantity, CA.CategoryName, C.City
+FROM OrderDetails AS OD
+    INNER JOIN Orders AS O
+    ON OD.OrderID=O.OrderID
+    INNER JOIN Customers AS C
+    ON O.CustomerID=C.CustomerID
+    INNER JOIN Products AS P
+    ON P.ProductID=OD.ProductID
+    INNER JOIN Categories AS CA
+    ON P.CategoryID=CA.CategoryID
+GROUP BY CA.CategoryName, C.City
+ORDER BY SumQuantity DESC;
+#방법2
+SELECT P.ProductID, P.ProductName, SUM(OD.Quantity) AS SumQuantity, CA.CategoryName, C.City
+FROM OrderDetails AS OD, Orders AS O, Customers AS C, Products AS P, Categories AS CA
+WHERE OD.OrderID=O.OrderID AND O.CustomerID=C.CustomerID AND P.ProductID=OD.ProductID AND P.CategoryID=CA.CategoryID
+GROUP BY CA.CategoryName, C.City
+ORDER BY SumQuantity DESC;
+#상품분류(Category)별, 고객지역별(City) 판매량 많은 순 정렬
+
+#방법1
+SELECT P.ProductName, SUM(OD.Quantity) AS SumQuantity, C.Country
+FROM OrderDetails AS OD
+    INNER JOIN Orders AS O
+    ON OD.OrderID=O.OrderID
+    INNER JOIN Customers AS C
+    ON O.CustomerID=C.CustomerID
+    INNER JOIN Products AS P
+    ON P.ProductID=OD.ProductID
+WHERE C.Country="USA"
+GROUP BY P.ProductName
+ORDER BY SumQuantity DESC;
+#방법2
+SELECT P.ProductName, SUM(OD.Quantity) AS SumQuantity, C.Country
+FROM OrderDetails AS OD, Orders AS O, Customers AS C, Products AS P
+WHERE OD.OrderID=O.OrderID AND O.CustomerID=C.CustomerID AND P.ProductID=OD.ProductID AND C.Country="USA"
+GROUP BY P.ProductName
+ORDER BY SumQuantity DESC;
+#고객국가(Country)가 USA이고, 상품별 판매량(Quantity)의 합이 많은순으로 정렬
