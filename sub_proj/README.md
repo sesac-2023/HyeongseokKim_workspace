@@ -8,7 +8,9 @@
 ## 사용 url
 ```
 f"https://sports.news.naver.com/kbaseball/schedule/index?date={}&month={}&year={}&teamCode="
+
 ```
+이외에도 fetch를 통해 json파일을 읽어와서 경기기록을 크롤링했다.
 
 ## 기술스택
 <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> 
