@@ -14,11 +14,8 @@ f"https://sports.news.naver.com/kbaseball/schedule/index?date={}&month={}&year={
 
 ## 기술스택
 <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> 
-<br>
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
-<br>
 <img src="https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariaDB&logoColor=white">
-<br>
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> 
 
 ## 구현 로직
@@ -39,7 +36,11 @@ f"https://sports.news.naver.com/kbaseball/schedule/index?date={}&month={}&year={
 4. while문을 이용해 위 코드가 계속 실행되도록 한다.
 
 ## 데이터베이스에 업데이트 된 테이블
-![TB_game](./img/경기결과%20테이블.jpg) 
-![TB_winpitcher](./img/승리투수%20테이블.jpg)
-![TB_losepitcher](./img/패전투수%20테이블.jpg)
-![TB_batter](./img/결승타자%20테이블.jpg) 
+- 경기결과
+![TB_game](./img/TB_game.jpg) 
+- 승리투수정보
+![TB_winpitcher](./img/TB_winpitcher.jpg)
+- 패전투수정보
+![TB_losepitcher](./img/TB_losepitcher.jpg)
+- 결승타자정보
+![TB_batter](./img/TB_batter.jpg) 
