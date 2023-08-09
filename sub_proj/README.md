@@ -28,9 +28,22 @@ f"https://sports.news.naver.com/kbaseball/schedule/index?date={}&month={}&year={
 2. 1번과 같은 원리로 어제 경기기록을 확인하고 기록이 있으면 패스하고,
 없으면 어제 경기결과와 승리투수, 패전투수, 결승타자의 기록을 
 크롤링하여 각 정보에 해당하는 데이터 베이스 테이블에 넣는다.
-3. 스케쥴 모듈을 활용하여 매일 오전 1시에 1번과 2번을 실행하는 함수를 만들고,
-오전 1시 2분에 코드실행종료하는 함수를 만든다.
-4. while문을 이용해 위 코드가 계속 실행되도록 한다.
+3. 스케쥴 모듈을 활용하여 매일 오전 0시 30분에 1번과 2번을 실행하는 함수를 만들고,
+while문을 이용해 위 코드가 계속 실행되도록 한다.
+
+## 프로젝트 구조
+📦sub_proj ->프로젝트 폴더
+ ┣ 📂bb_modules ->main.py에 사용되는 모듈들을 모아놓은 폴더
+ ┃ ┣ 📜baseballdb_config ->MySQL(MariaDB)에 연결시키기 위해 init에 들어갈 개인정보
+ ┃ ┣ 📜baseball_db.py -> MySQL(MariaDB)을 작동시킬 여러 함수들을 클래스화 한 모듈
+ ┃ ┣ 📜first_baseball_crawler.py -> 최초로 크롤링하는 함수들을 클래스화 한 모듈
+ ┃ ┗ 📜update_baseball_crawler.py -> 하루 전날의 경기결과와 기록들을 크롤링하는 함수들을 클래스화 한 모듈
+ ┣ 📜BASEBALL_DB_COMMAND.sql -> 데이터베이스에서 사용하는 sql명령어 정리
+ ┣ 📜main.py -> 실제 작동시킬 코드
+ ┗ 📜README.md -> 프로젝트를 설명하는 지금 이 파일
+
+## ERD cloud
+![ERD_cloud](./img/BASEBALL_ERD.png)
 
 ## 데이터베이스에 업데이트 된 테이블
 - 경기결과

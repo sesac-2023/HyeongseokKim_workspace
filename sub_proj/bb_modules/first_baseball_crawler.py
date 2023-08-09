@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from datetime import timedelta
 import json
-from baseball_db import db
+from bb_modules.baseball_db import db
 
 #이전의 경기기록 크롤링하는 클래스
 class weekagoCrawler:
@@ -13,13 +13,13 @@ class weekagoCrawler:
 
     def crawl_game():
         now = dt.datetime.now()
-        weekago = now  - timedelta(days=7)
-        aymd, ay, am = weekago.strftime('%Y%m%d'), weekago.strftime('%Y'), weekago.strftime('%m')
+        twdago = now  - timedelta(days=2)
+        aymd, ay, am = twdago.strftime('%Y%m%d'), twdago.strftime('%Y'), twdago.strftime('%m')
         x = '4'
         result_lst = []
         for month in range(int(x.zfill(2)), int(am)+1):
             url=f'https://sports.news.naver.com/kbaseball/schedule/index?date={aymd}&month={month}&year={ay}&teamCode='
-            response, soup, divs = requests.get(url), bs(response.text, 'lxml'), soup.select('#calendarWrap>div')
+            response = requests.get(url); soup = bs(response.text, 'lxml'); divs = soup.select('#calendarWrap>div')
             for div in divs:
                 mo=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[0]), '02')
                 day=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[1]), '02')
@@ -27,7 +27,8 @@ class weekagoCrawler:
                 for tr in trs:
                     tds = tr.select('td')
                     if tr == trs[0]:
-                        hour, playedat, form = tds[1].text.strip(), f'{ay}-{mo}-{day} {hour}:00', '%Y-%m-%d %H:%M:%S'
+                        hour = tds[1].text.strip()
+                        playedat, form = f'{ay}-{mo}-{day} {hour}:00', '%Y-%m-%d %H:%M:%S'
                         if len(tds) == 3:
                             break
                         elif tr.select('td.add_state'):
@@ -49,7 +50,8 @@ class weekagoCrawler:
                         else:
                             break
                     else:
-                        hour, playedat, form = tds[0].text.strip(), f'{ay}-{mo}-{day} {hour}:00', '%Y-%m-%d %H:%M:%S'
+                        hour = tds[0].text.strip()
+                        playedat, form = f'{ay}-{mo}-{day} {hour}:00', '%Y-%m-%d %H:%M:%S'
                         if len(tds) == 3:
                             break
                         elif tr.select('td.add_state'):
@@ -75,13 +77,13 @@ class weekagoCrawler:
     
     def crawl_record():
         now = dt.datetime.now()
-        weekago = now  - timedelta(days=7)
-        aymd, ay, am = weekago.strftime('%Y%m%d'), weekago.strftime('%Y'), weekago.strftime('%m')
+        twdago = now  - timedelta(days=2)
+        aymd, ay, am = twdago.strftime('%Y%m%d'), twdago.strftime('%Y'), twdago.strftime('%m')
         x = '4'
         result_lst = []
         for month in range(int(x.zfill(2)), int(am)+1):
             url=f'https://sports.news.naver.com/kbaseball/schedule/index?date={aymd}&month={month}&year={ay}&teamCode='
-            response, soup, divs = requests.get(url), bs(response.text, 'lxml'), soup.select('#calendarWrap>div')
+            response = requests.get(url); soup = bs(response.text, 'lxml'); divs = soup.select('#calendarWrap>div')
             for div in divs:
                 trs = div.select('tr')
                 for tr in trs:
@@ -117,7 +119,7 @@ class weekagoCrawler:
                             else:
                                 raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
                                 record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                record_rp, record = requests.get(record_url), json.loads(record_rp.text)
+                                record_rp = requests.get(record_url); record = json.loads(record_rp.text)
                                 pit_record = record['result']['recordData']['pitchersBoxscore']
                                 win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
                                                 [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']
@@ -178,7 +180,7 @@ class weekagoCrawler:
                             else:
                                 raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
                                 record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                record_rp, record = requests.get(record_url), json.loads(record_rp.text)
+                                record_rp = requests.get(record_url); record = json.loads(record_rp.text)
                                 pit_record = record['result']['recordData']['pitchersBoxscore']
                                 win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
                                                 [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']

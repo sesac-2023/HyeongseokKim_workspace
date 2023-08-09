@@ -55,4 +55,6 @@ class MariaDB:
             cursor.execute(sql) 
             result=cursor.fetchall()
         return result
-    
+
+baseballdb_config = MariaDB.read_config('./bb_modules/baseballdb_config')
+db=MariaDB(**baseballdb_config)    

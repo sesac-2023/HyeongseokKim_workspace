@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from datetime import timedelta
 import json
-from baseball_db import db
+from bb_modules.baseball_db import db
 
 #어제 경기기록 크롤링하는 클래스
 class yesterCrawler:
@@ -17,7 +17,7 @@ class yesterCrawler:
         yymd, yy, yd, ym = yester.strftime('%Y%m%d'), yester.strftime('%Y'), yester.strftime('%d'), yester.strftime('%m')
         result_lst = []
         url=f'https://sports.news.naver.com/kbaseball/schedule/index?date={yymd}&month={ym}&year={yy}&teamCode='
-        response, soup, divs = requests.get(url), bs(response.text, 'lxml'), soup.select('#calendarWrap>div')
+        response = requests.get(url); soup = bs(response.text, 'lxml'); divs = soup.select('#calendarWrap>div')
         for div in divs:
             mo=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[0]), '02')
             day=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[1]), '02')
@@ -64,7 +64,7 @@ class yesterCrawler:
                                 break
                                                     
                         result_lst.append([dt_playedat, away, asc, home, hsc, stadium, bc])
-            return result_lst
+        return result_lst
     
     def crawl_ytrecord():
         now = dt.datetime.now()
@@ -72,7 +72,7 @@ class yesterCrawler:
         yymd, yy, yd, ym = yester.strftime('%Y%m%d'), yester.strftime('%Y'), yester.strftime('%d'), yester.strftime('%m')
         result_lst = []
         url=f'https://sports.news.naver.com/kbaseball/schedule/index?date={yymd}&month={ym}&year={yy}&teamCode='
-        response, soup, divs = requests.get(url), bs(response.text, 'lxml'), soup.select('#calendarWrap>div')
+        response = requests.get(url); soup = bs(response.text, 'lxml'); divs = soup.select('#calendarWrap>div')
         for div in divs:
             mo=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[0]), '02')
             day=format(int(div.select('td')[0].text.strip().replace('.',' ').split(' ')[1]), '02')
@@ -114,7 +114,7 @@ class yesterCrawler:
                                 else:
                                     raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
                                     record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                    record_rp, record = requests.get(record_url), json.loads(record_rp.text)
+                                    record_rp = requests.get(record_url); record = json.loads(record_rp.text)
                                     pit_record = record['result']['recordData']['pitchersBoxscore']
                                     win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
                                                     [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']
@@ -173,7 +173,7 @@ class yesterCrawler:
                                 else:
                                     raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
                                     record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                    record_rp, record = requests.get(record_url), json.loads(record_rp.text)
+                                    record_rp = requests.get(record_url); record = json.loads(record_rp.text)
                                     pit_record = record['result']['recordData']['pitchersBoxscore']
                                     win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
                                                     [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']

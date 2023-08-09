@@ -1,14 +1,12 @@
-from modules.first_baseball_crawler import weekagoCrawler as wc
-from modules.update_baseball_crawler import yesterCrawler as yc
-from modules.baseball_db import MariaDB
+from bb_modules.first_baseball_crawler import weekagoCrawler as wc
+from bb_modules.update_baseball_crawler import yesterCrawler as yc
+from bb_modules.baseball_db import db
 import datetime as dt
 from datetime import timedelta
 import time
 
 if __name__ == "__main__":
     now = dt.datetime.now()
-    baseballdb_config = MariaDB.read_config('./modules/baseballdb_config')
-    db=MariaDB(**baseballdb_config)
     def bb_week():
         weekago = now  - timedelta(days=7)
         wka=weekago.strftime('%Y-%m-%d')
@@ -42,9 +40,9 @@ if __name__ == "__main__":
         return
                
     while True:
+        tar_hour = 0; tar_min = 30
         CurTm = time.localtime()
-        if CurTm.tm_hour == 11 and CurTm.tm_min == 25:
-            bb_week(); bb_yester()
+        if CurTm.tm_hour == tar_hour and CurTm.tm_min == tar_min:
+            bb_week() and bb_yester()
             print(f'업데이트 시간:{now}')
-            break
         time.sleep(60)
