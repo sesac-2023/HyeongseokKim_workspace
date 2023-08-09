@@ -7,7 +7,7 @@ import json
 from bb_modules.baseball_db import db
 
 #이전의 경기기록 크롤링하는 클래스
-class weekagoCrawler:
+class twodaysagoCrawler:
     def __init__(self) -> None:
         pass
 
