@@ -11,7 +11,7 @@ class twodaysagoCrawler:
     def __init__(self) -> None:
         pass
 
-    def crawl_game():
+    def crawl_game(): #이틀 전 경기결과를 크롤링해주는 함수
         now = dt.datetime.now()
         twdago = now  - timedelta(days=2)
         aymd, ay, am = twdago.strftime('%Y%m%d'), twdago.strftime('%Y'), twdago.strftime('%m')
@@ -75,7 +75,7 @@ class twodaysagoCrawler:
                     result_lst.append([dt_playedat, away, asc, home, hsc, stadium, bc])
         return result_lst
     
-    def crawl_record():
+    def crawl_record(): #이틀 전 경기들의 승리투수, 패전투수, 결승타자 기록들을 크롤링해주는 함수
         now = dt.datetime.now()
         twdago = now  - timedelta(days=2)
         aymd, ay, am = twdago.strftime('%Y%m%d'), twdago.strftime('%Y'), twdago.strftime('%m')

@@ -11,7 +11,7 @@ class yesterCrawler:
     def __init__(self) -> None:
         pass
 
-    def crawl_ytgame():
+    def crawl_ytgame(): #하루 전 경기결과를 크롤링해주는 함수
         now = dt.datetime.now()
         yester = now  - timedelta(days=1)
         yymd, yy, yd, ym = yester.strftime('%Y%m%d'), yester.strftime('%Y'), yester.strftime('%d'), yester.strftime('%m')
@@ -66,7 +66,7 @@ class yesterCrawler:
                         result_lst.append([dt_playedat, away, asc, home, hsc, stadium, bc])
         return result_lst
     
-    def crawl_ytrecord():
+    def crawl_ytrecord(): #하루 전 경기들의 승리투수, 패전투수, 결승타자 기록들을 크롤링해주는 함수
         now = dt.datetime.now()
         yester = now  - timedelta(days=1)
         yymd, yy, yd, ym = yester.strftime('%Y%m%d'), yester.strftime('%Y'), yester.strftime('%d'), yester.strftime('%m')
