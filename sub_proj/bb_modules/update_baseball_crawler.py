@@ -204,7 +204,7 @@ class yesterCrawler:
                             else:
                                 break
                         result_lst.append([win_pit,lose_pit,fin_bat])             
-            ID_list=list(db.select_all())
+            ID_list=list(db.select_order())
             SortedID_list = sorted(ID_list, key=lambda x: x[0])
             wp_ordered_lst=[] ; lp_ordered_lst=[]; fb_ordered_lst=[]
             for i in range(len(result_lst)):
