@@ -85,125 +85,50 @@ class yesterCrawler:
                     if len(tds) == 3:
                             break
                     else:
-                        if tr == trs[0]:
-                            if tr.select('td.add_state'): 
-                                win_pit_name = '' ; lose_pit_name = '' ; fin_bat_name = ''
-                                win_pit_inn = '' ; lose_pit_inn = '' ; fin_bat_abs = ''
-                                win_pit_hit = '' ; lose_pit_hit = '' ; fin_bat_hthr = ''
-                                win_pit_bbhp = '' ; lose_pit_bbhp = '' ; fin_bat_bb = ''
-                                win_pit_kk = '' ; lose_pit_kk = '' ; fin_bat_kk = ''
-                                win_pit_lr = ''; lose_pit_lr = '' ; fin_bat_rbi = ''
-                                win_pit_pn = '' ; lose_pit_pn = '' ; fin_bat_run = ''
-                                win_pit_era = ''; lose_pit_era = '' ; fin_bat_ba = ''
-                                win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
-                            elif tr.find_all('img')[2]['alt'] == "경기결과":
-                                if tr.select('strong.td_score')[0].text.split(':')[0] == tr.select('strong.td_score')[0].text.split(':')[1]:
-                                    win_pit_name = '' ; lose_pit_name = '' ; fin_bat_name = ''
-                                    win_pit_inn = '' ; lose_pit_inn = '' ; fin_bat_abs = ''
-                                    win_pit_hit = '' ; lose_pit_hit = '' ; fin_bat_hthr = ''
-                                    win_pit_bbhp = '' ; lose_pit_bbhp = '' ; fin_bat_bb = ''
-                                    win_pit_kk = '' ; lose_pit_kk = '' ; fin_bat_kk = ''
-                                    win_pit_lr = ''; lose_pit_lr = '' ; fin_bat_rbi = ''
-                                    win_pit_pn = '' ; lose_pit_pn = '' ; fin_bat_run = ''
-                                    win_pit_era = ''; lose_pit_era = '' ; fin_bat_ba = ''
-                                    win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                    lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                    fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
-                                else:
-                                    raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
-                                    record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                    record_rp = requests.get(record_url); record = json.loads(record_rp.text)
-                                    pit_record = record['result']['recordData']['pitchersBoxscore']
-                                    win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
-                                                    [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']
-                                    lose_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '패'] or \
-                                                    [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '패']
-                                    for wp in win_pit_info:
-                                        win_pit_name, win_pit_inn = wp['name'], wp['inn']
-                                        win_pit_hit, win_pit_bbhp, win_pit_kk= str(wp['hit']), str(wp['bbhp']), str(wp['kk'])
-                                        win_pit_lr = str(wp['r'])+'('+str(wp['er'])+')'
-                                        win_pit_pn, win_pit_era = str(wp['bf']), str(wp['era'])
-                                        win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                    for lp in lose_pit_info:
-                                        lose_pit_name, lose_pit_inn = lp['name'], lp['inn']
-                                        lose_pit_hit, lose_pit_bbhp, lose_pit_kk = str(lp['hit']), str(lp['bbhp']), str(lp['kk'])
-                                        lose_pit_lr = str(lp['r'])+'('+str(lp['er'])+')'
-                                        lose_pit_pn, lose_pit_era = str(lp['bf']), str(lp['era'])
-                                        lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                    bat_record, bat_score_record = record['result']['recordData']['etcRecords'], record['result']['recordData']['battersBoxscore']
-                                    fin_bat_name = bat_record[0]['result'].split('(')[0]
-                                    fin_bat_info = [bat_info for bat_info in list(bat_score_record.values())[2] if bat_info['name'] == fin_bat_name] or \
-                                                    [bat_info for bat_info in list(bat_score_record.values())[3] if bat_info['name'] == fin_bat_name]
-                                    for fb in fin_bat_info:
-                                        fin_bat_abs = str(fb['ab'])
-                                        fin_bat_hthr = str(fb['hit'])+'('+str(fb['hr'])+')'
-                                        fin_bat_bb, fin_bat_kk = str(fb['bb']), str(fb['kk'])
-                                        fin_bat_rbi, fin_bat_run, fin_bat_ba = str(fb['rbi']), str(fb['run']), fb['hra']
-                                        fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
+                        if tr.select('td.add_state'): 
+                            win_pit = ('') * 8
+                            lose_pit = ('') * 8
+                            fin_bat = ('') * 8
+                        elif tr.find_all('img')[2]['alt'] == "경기결과":
+                            if tr.select('strong.td_score')[0].text.split(':')[0] == tr.select('strong.td_score')[0].text.split(':')[1]:
+                                win_pit = ('') * 8
+                                lose_pit = ('') * 8
+                                fin_bat = ('') * 8
                             else:
-                                break
+                                raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
+                                record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
+                                record_rp = requests.get(record_url); record = json.loads(record_rp.text)
+                                pit_record = record['result']['recordData']['pitchersBoxscore']
+                                win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
+                                                [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']
+                                lose_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '패'] or \
+                                                [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '패']
+                                for wp in win_pit_info:
+                                    win_pit_name, win_pit_inn = wp['name'], wp['inn']
+                                    win_pit_hit, win_pit_bbhp, win_pit_kk= str(wp['hit']), str(wp['bbhp']), str(wp['kk'])
+                                    win_pit_lr = str(wp['r'])+'('+str(wp['er'])+')'
+                                    win_pit_pn, win_pit_era = str(wp['bf']), str(wp['era'])
+                                    win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
+                                for lp in lose_pit_info:
+                                    lose_pit_name, lose_pit_inn = lp['name'], lp['inn']
+                                    lose_pit_hit, lose_pit_bbhp, lose_pit_kk = str(lp['hit']), str(lp['bbhp']), str(lp['kk'])
+                                    lose_pit_lr = str(lp['r'])+'('+str(lp['er'])+')'
+                                    lose_pit_pn, lose_pit_era = str(lp['bf']), str(lp['era'])
+                                    lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
+                                bat_record = record['result']['recordData']['etcRecords']; bat_score_record = record['result']['recordData']['battersBoxscore']
+                                fin_bat_nm = bat_record[0]['result'].split('(')[0]
+                                fin_bat_info = [{**bat_info, 'name': fin_bat_nm} for bat_info in list(bat_score_record.values())[2] if bat_info['name'] == fin_bat_nm] or \
+                                                [{**bat_info, 'name': fin_bat_nm} for bat_info in list(bat_score_record.values())[3] if bat_info['name'] == fin_bat_nm]
+                                for fb in fin_bat_info:
+                                    fin_bat_name = fb['name']
+                                    fin_bat_abs = str(fb['ab'])
+                                    fin_bat_hthr = str(fb['hit'])+'('+str(fb['hr'])+')'
+                                    fin_bat_bb, fin_bat_kk = str(fb['bb']), str(fb['kk'])
+                                    fin_bat_rbi, fin_bat_run, fin_bat_ba = str(fb['rbi']), str(fb['run']), fb['hra']
+                                    fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
                         else:
-                            if tr.select('td.add_state'): 
-                                win_pit_name = '' ; lose_pit_name = '' ; fin_bat_name = ''
-                                win_pit_inn = '' ; lose_pit_inn = '' ; fin_bat_abs = ''
-                                win_pit_hit = '' ; lose_pit_hit = '' ; fin_bat_hthr = ''
-                                win_pit_bbhp = '' ; lose_pit_bbhp = '' ; fin_bat_bb = ''
-                                win_pit_kk = '' ; lose_pit_kk = '' ; fin_bat_kk = ''
-                                win_pit_lr = ''; lose_pit_lr = '' ; fin_bat_rbi = ''
-                                win_pit_pn = '' ; lose_pit_pn = '' ; fin_bat_run = ''
-                                win_pit_era = ''; lose_pit_era = '' ; fin_bat_ba = ''
-                                win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
-                            elif tr.find_all('img')[2]['alt'] == "경기결과":
-                                if tr.select('strong.td_score')[0].text.split(':')[0] == tr.select('strong.td_score')[0].text.split(':')[1]:
-                                    win_pit_name = '' ; lose_pit_name = '' ; fin_bat_name = ''
-                                    win_pit_inn = '' ; lose_pit_inn = '' ; fin_bat_abs = ''
-                                    win_pit_hit = '' ; lose_pit_hit = '' ; fin_bat_hthr = ''
-                                    win_pit_bbhp = '' ; lose_pit_bbhp = '' ; fin_bat_bb = ''
-                                    win_pit_kk = '' ; lose_pit_kk = '' ; fin_bat_kk = ''
-                                    win_pit_lr = ''; lose_pit_lr = '' ; fin_bat_rbi = ''
-                                    win_pit_pn = '' ; lose_pit_pn = '' ; fin_bat_run = ''
-                                    win_pit_era = ''; lose_pit_era = '' ; fin_bat_ba = ''
-                                    win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                    lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                    fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
-                                else:
-                                    raw_record_url = tr.select('a')[0]['href'].replace('game', 'games')
-                                    record_url = 'https://api-gw.sports.naver.com/schedule'+raw_record_url
-                                    record_rp = requests.get(record_url); record = json.loads(record_rp.text)
-                                    pit_record = record['result']['recordData']['pitchersBoxscore']
-                                    win_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '승'] or \
-                                                    [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '승']
-                                    lose_pit_info = [pit_info for pit_info in list(pit_record.values())[0] if pit_info['wls'] == '패'] or \
-                                                    [pit_info for pit_info in list(pit_record.values())[1] if pit_info['wls'] == '패']
-                                    for wp in win_pit_info:
-                                        win_pit_name, win_pit_inn = wp['name'], wp['inn']
-                                        win_pit_hit, win_pit_bbhp, win_pit_kk= str(wp['hit']), str(wp['bbhp']), str(wp['kk'])
-                                        win_pit_lr = str(wp['r'])+'('+str(wp['er'])+')'
-                                        win_pit_pn, win_pit_era = str(wp['bf']), str(wp['era'])
-                                        win_pit = (win_pit_name, win_pit_inn, win_pit_hit, win_pit_bbhp, win_pit_kk, win_pit_lr, win_pit_pn, win_pit_era)
-                                    for lp in lose_pit_info:
-                                        lose_pit_name, lose_pit_inn = lp['name'], lp['inn']
-                                        lose_pit_hit, lose_pit_bbhp, lose_pit_kk = str(lp['hit']), str(lp['bbhp']), str(lp['kk'])
-                                        lose_pit_lr = str(lp['r'])+'('+str(lp['er'])+')'
-                                        lose_pit_pn, lose_pit_era = str(lp['bf']), str(lp['era'])
-                                        lose_pit = (lose_pit_name, lose_pit_inn, lose_pit_hit, lose_pit_bbhp, lose_pit_kk, lose_pit_lr, lose_pit_pn, lose_pit_era)
-                                    bat_record, bat_score_record = record['result']['recordData']['etcRecords'], record['result']['recordData']['battersBoxscore']
-                                    fin_bat_name = bat_record[0]['result'].split('(')[0]
-                                    fin_bat_info = [bat_info for bat_info in list(bat_score_record.values())[2] if bat_info['name'] == fin_bat_name] or \
-                                                    [bat_info for bat_info in list(bat_score_record.values())[3] if bat_info['name'] == fin_bat_name]
-                                    for fb in fin_bat_info:
-                                        fin_bat_abs = str(fb['ab'])
-                                        fin_bat_hthr = str(fb['hit'])+'('+str(fb['hr'])+')'
-                                        fin_bat_bb, fin_bat_kk = str(fb['bb']), str(fb['kk'])
-                                        fin_bat_rbi, fin_bat_run, fin_bat_ba = str(fb['rbi']), str(fb['run']), fb['hra']
-                                        fin_bat = (fin_bat_name, fin_bat_abs, fin_bat_hthr, fin_bat_bb, fin_bat_kk, fin_bat_rbi, fin_bat_run, fin_bat_ba)
-                            else:
-                                break
-                        result_lst.append([win_pit,lose_pit,fin_bat])             
+                            break
+                    result_lst.append([win_pit,lose_pit,fin_bat])             
             ID_list=list(db.select_order())
             SortedID_list = sorted(ID_list, key=lambda x: x[0])
             wp_ordered_lst=[] ; lp_ordered_lst=[]; fb_ordered_lst=[]

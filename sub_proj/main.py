@@ -42,7 +42,7 @@ if __name__ == "__main__": #main.py를 실행할 때 작동하는 코드들
     while True:
         cur_time = time.localtime() #현재시간
         cur_time_udt = time.strftime('%c', cur_time) # 현재시간을 '요일 월 일 시:분:초 년도'의 형태로 변환
-        if cur_time.tm_min == 0: #현재시각이 정시면 실행
-            bb_twodaysago() and bb_yester() #위에서 정의한 코드 실행
+        if cur_time.tm_min == 51: #현재시각이 정시면 실행
+            bb_twodaysago() or bb_yester() #위에서 정의한 코드 실행
             print(f'업데이트 시간:{cur_time_udt}') #변환된 시간으로 업데이트 시간 출력
         time.sleep(60)  # 1분마다 체크
